@@ -1,4 +1,4 @@
-module go-utils
+module github.com/812349928/go-utils
 
 go 1.17
 
