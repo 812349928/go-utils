@@ -49,7 +49,6 @@ type TxResponse struct {
 //初始化函数
 // create a etcd
 func NewEtcd(endpoints []string, timeout time.Duration) (etcd *Etcd, err error) {
-
 	var (
 		client *clientv3.Client
 	)
