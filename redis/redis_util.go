@@ -9,20 +9,13 @@ type Redis struct {
 	Client *redis.Client
 }
 
-func NewRedis(host, port, password, dbname string) *Redis {
-	redisUtil := &Redis{}
-
-	redisUtil.Client = redis.NewClient(&redis.Options{
+func (r Redis) Init(host, port, password string) {
+	r.Client = redis.NewClient(&redis.Options{
 		Addr:     fmt.Sprintf("%s:%s", host, port),
 		Password: password,
 		DB:       0,
 	})
-	_, err := redisUtil.Client.Ping().Result()
-	if err != nil {
-		return redisUtil
-	}
-
-	return redisUtil
+	r.Client.Ping().Result()
 }
 
 func (r *Redis) Set(key string, val interface{}, expire int) error {
