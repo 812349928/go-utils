@@ -5,33 +5,34 @@ import (
 	"github.com/go-redis/redis"
 )
 
-func NewQuery(host, port, password, dbname string) (*redis.Client, error) {
-	redisClient := &redis.Client{}
-	if redisClient != nil {
-		return redisClient, nil
-	}
+type Redis struct {
+	Client *redis.Client
+}
 
-	redisClient = redis.NewClient(&redis.Options{
+func NewRedis(host, port, password, dbname string) *Redis {
+	redisUtil := &Redis{}
+
+	redisUtil.Client = redis.NewClient(&redis.Options{
 		Addr:     fmt.Sprintf("%s:%s", host, port),
 		Password: password,
 		DB:       0,
 	})
-	_, err := redisClient.Ping().Result()
+	_, err := redisUtil.Client.Ping().Result()
 	if err != nil {
-		return nil, err
+		return redisUtil
 	}
 
-	return redisClient, nil
+	return redisUtil
 }
 
-func Set(redisClient *redis.Client, key string, val interface{}, expire int) error {
+func (r *Redis) Set(key string, val interface{}, expire int) error {
 	if expire > 0 {
-		err := redisClient.Do("SET", key, val, "PX", expire).Err()
+		err := r.Client.Do("SET", key, val, "PX", expire).Err()
 		if err != nil {
 			return err
 		}
 	} else {
-		err := redisClient.Do("SET", key, val).Err()
+		err := r.Client.Do("SET", key, val).Err()
 		if err != nil {
 			return err
 		}
@@ -40,8 +41,8 @@ func Set(redisClient *redis.Client, key string, val interface{}, expire int) err
 	return nil
 }
 
-func RedisGet(redisClient *redis.Client, key string) (string, error) {
-	value, err := redisClient.Do("GET", key).String()
+func (r *Redis) RedisGet(key string) (string, error) {
+	value, err := r.Client.Do("GET", key).String()
 	if err != nil {
 		return "", nil
 	}
