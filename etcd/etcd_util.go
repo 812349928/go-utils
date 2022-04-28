@@ -8,6 +8,8 @@ import (
 	"time"
 )
 
+var EtcdUtil = new(Etcd)
+
 // 定义一个etcd客户端结构体
 type Etcd struct {
 	endpoints []string
@@ -61,7 +63,7 @@ func NewEtcd(endpoints []string, timeout time.Duration) (etcd *Etcd, err error) 
 		return
 	}
 
-	etcd = &Etcd{
+	EtcdUtil = &Etcd{
 
 		endpoints: endpoints,
 		client:    client,
