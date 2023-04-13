@@ -14,3 +14,9 @@ func (x Int64Slice) Swap(i, j int)      { x[i], x[j] = x[j], x[i] }
 func isNaN(f int64) bool {
 	return f != f
 }
+
+type InterfaceSlice []int64
+
+func (x InterfaceSlice) Len() int           { return len(x) }
+func (x InterfaceSlice) Less(i, j int) bool { return x[i] < x[j] }
+func (x InterfaceSlice) Swap(i, j int)      { x[i], x[j] = x[j], x[i] }
