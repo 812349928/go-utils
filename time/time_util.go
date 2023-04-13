@@ -10,6 +10,10 @@ const (
 	ArrayIsEmpty = "array is empty"
 )
 
+func Sort(x []time.Time) {
+	sort.Times(x)
+}
+
 func GetMax(ts ...time.Time) time.Time {
 	if arr, err := getArrToTimes(ts...); err != nil {
 		return time.Time{}
