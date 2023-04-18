@@ -2,6 +2,7 @@ package convert
 
 import (
 	"errors"
+	"fmt"
 	"github.com/812349928/go-utils/array"
 	"math"
 	"strconv"
@@ -13,6 +14,10 @@ var Items = []byte{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', '
 // ConvertByTen
 // 十进制转换成其他进制
 func ConvertToXByTen(n, to int64) string {
+	if to == 10 {
+		return fmt.Sprintf("%d", n)
+	}
+
 	arr := make([]string, 0)
 	for {
 		var i int64
@@ -65,7 +70,12 @@ func ConvertToTenByX(s string, from int64) (int64, error) {
 	return x, nil
 }
 
+// 从某一进制转换到某一进制
 func ConvertToXByY(s string, from, to int64) (string, error) {
+	if from == to {
+		return s, nil
+	}
+
 	n, err := ConvertToTenByX(s, from)
 	if err != nil {
 		return "", err
@@ -80,9 +90,10 @@ func CheckX(s string, from int64) bool {
 	for i, item := range Items {
 		m[item] = i
 	}
+	m[0] = -1
 
 	for i, _ := range s {
-		if m[s[i]] >= int(from) {
+		if m[s[i]] == 0 || m[s[i]] >= int(from) {
 			return false
 		}
 	}
