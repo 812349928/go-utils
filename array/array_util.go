@@ -1,6 +1,7 @@
 package array
 
 import (
+	"fmt"
 	"reflect"
 )
 
@@ -53,3 +54,31 @@ func IsExist(arr interface{}, item interface{}) bool {
 
 	return false
 }
+
+//TODO:去重
+type Interface interface {
+	Index() int
+	Map() map[interface{}]bool
+	IsExist(o map[interface{}]bool, x interface{}) bool
+	Remove()
+}
+
+func DuplicateRemoval(x []int64) {
+	m := make(map[int64]bool)
+	l := len(x)
+	y := make([]int64, 0)
+	for i := 0; i < l; i++ {
+		if !m[x[i]] {
+			m[x[i]] = true
+			y = append(y, x[i])
+		}
+	}
+	fmt.Println(l)
+	x = make([]int64, len(y))
+	x = y
+}
+
+////数组翻转
+//func OverTurn[T interface{}](a []T) []T {
+//
+//}
