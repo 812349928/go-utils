@@ -1,40 +1,18 @@
 package convert
 
 import (
-	"fmt"
+	"errors"
+	"github.com/812349928/go-utils/array"
 	"math"
 	"strconv"
 	"strings"
 )
 
-const (
-	Two = 2
-	Ten = 10
-)
-
 var Items = []byte{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v'}
 
-func ConvertToBinByTen(n int64) string {
-	var x int64
-	arr := make([]int64, 0)
-	for {
-		if n <= 1 {
-			arr = append(arr, n)
-			break
-		} else {
-			arr = append(arr, (n % Two))
-			n /= Two
-		}
-	}
-	for i, v := range arr {
-		x += v * int64(math.Pow10(i))
-	}
-
-	return fmt.Sprintf("%08d", x)
-}
-
 // ConvertByTen
-func ConvertByTen(n, to int64) string {
+// 十进制转换成其他进制
+func ConvertToXByTen(n, to int64) string {
 	arr := make([]string, 0)
 	for {
 		var i int64
@@ -48,6 +26,7 @@ func ConvertByTen(n, to int64) string {
 			arr = append(arr, string(Items[i]))
 		}
 	}
+	arr = array.OverTurn[string](arr)
 	x := strings.Join(arr, "")
 
 	return x
@@ -55,7 +34,11 @@ func ConvertByTen(n, to int64) string {
 
 // ConvertToTen
 // 其他进制转换为十进制
-func ConvertToTen(s string, from int64) (int64, error) {
+func ConvertToTenByX(s string, from int64) (int64, error) {
+	if b := CheckX(s, from); !b {
+		return 0, errors.New("data is not legal")
+	}
+
 	//如果本身就是十进制则不进行转换
 	if from == 10 {
 		return strconv.ParseInt(s, 10, 64)
@@ -82,19 +65,27 @@ func ConvertToTen(s string, from int64) (int64, error) {
 	return x, nil
 }
 
-func ConvertToTenByBin(s string) int64 {
-	arr := make([]int64, 0)
-	var x int64
+func ConvertToXByY(s string, from, to int64) (string, error) {
+	n, err := ConvertToTenByX(s, from)
+	if err != nil {
+		return "", err
+	}
+
+	return ConvertToXByTen(n, to), nil
+}
+
+// 判断是否是合法的数据
+func CheckX(s string, from int64) bool {
+	m := make(map[byte]int)
+	for i, item := range Items {
+		m[item] = i
+	}
+
 	for i, _ := range s {
-		n, _ := strconv.ParseInt(s[i:i+1], Ten, 64)
-		arr = append(arr, n)
+		if m[s[i]] >= int(from) {
+			return false
+		}
 	}
 
-	l := len(arr)
-
-	for i, v := range arr {
-		x += v * int64(math.Pow(Two, float64(l-i-1)))
-	}
-
-	return x
+	return true
 }

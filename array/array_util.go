@@ -55,7 +55,7 @@ func IsExist(arr interface{}, item interface{}) bool {
 	return false
 }
 
-//TODO:去重
+// TODO:去重
 type Interface interface {
 	Index() int
 	Map() map[interface{}]bool
@@ -78,7 +78,11 @@ func DuplicateRemoval(x []int64) {
 	x = y
 }
 
-////数组翻转
-//func OverTurn[T interface{}](a []T) []T {
-//
-//}
+// 数组翻转
+func OverTurn[T any](a []T) []T {
+	l := len(a)
+	for i := 0; i < l/2; i++ {
+		a[i], a[l-i-1] = a[l-i-1], a[i]
+	}
+	return a
+}
