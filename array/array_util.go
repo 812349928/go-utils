@@ -5,7 +5,8 @@ import (
 	"reflect"
 )
 
-//func DeleteItems(arr interface{}, item ...interface{}) interface{} {
+//
+//func DeleteItems[T any](arr []T, item ...T) []T {
 //	m := make(map[interface{}][]int)
 //	indexs := make([]int, 0)
 //
@@ -34,6 +35,7 @@ import (
 //
 //	return nil
 //}
+
 //
 //func StringToInt64(a []string) []int64 {
 //
